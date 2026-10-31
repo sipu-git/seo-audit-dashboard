@@ -1,6 +1,7 @@
 import { AlertCircle, CheckCircle2, RefreshCw } from "lucide-react";
 import { DashboardMetricCard } from "../../dashboard-widgets";
 import { Button } from "../../ui/button";
+import { Card } from "../../ui/card";
 
 export function AdminQueueStatus({
   error,
@@ -19,7 +20,11 @@ export function AdminQueueStatus({
   });
 
   return (
-    <div className="admin-status-line" role="status" aria-live="polite">
+    <Card
+      className="admin-status-line min-h-[68px] rounded-xl border-[#e7ede9] bg-white px-4 py-3 shadow-[0_2px_8px_rgba(41,62,50,0.03)]"
+      role="status"
+      aria-live="polite"
+    >
       <div className="monitor-status-copy">
         <span
           className={`monitor-status-icon ${error ? "monitor-status-error" : lastUpdated ? "monitor-status-live" : ""
@@ -61,7 +66,7 @@ export function AdminQueueStatus({
         />
         {refreshing ? "Refreshing…" : "Refresh"}
       </Button>
-    </div>
+    </Card>
   );
 }
 

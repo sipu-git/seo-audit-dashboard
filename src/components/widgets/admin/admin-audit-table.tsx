@@ -3,6 +3,7 @@ import type { AuditRow } from "../../audit-types";
 import { AuditStatusBadge } from "../../dashboard-widgets";
 import { Icon } from "../../icons";
 import { Button } from "../../ui/button";
+import { Card } from "../../ui/card";
 import { Input } from "../../ui/input";
 import {Pagination,PaginationContent,PaginationEllipsis,PaginationItem,PaginationLink,PaginationNext,PaginationPrevious} from "../../ui/pagination";
 import { Progress } from "../../ui/progress";
@@ -35,6 +36,7 @@ function AuditTableToolbar({
       <div className="table-search">
         <Icon name="search" />
         <Input
+          className="h-auto min-w-0 border-0 bg-transparent px-0 py-0 text-xs font-medium text-[#22302a] shadow-none hover:border-0 focus-visible:ring-0 placeholder:text-[#98a79f]"
           aria-label="Search audit jobs"
           placeholder="Search website, client or job ID"
           value={search}
@@ -43,7 +45,7 @@ function AuditTableToolbar({
       </div>
       <Select value={filter} onValueChange={onFilterChange}>
         <SelectTrigger
-          className="admin-status-select"
+          className="admin-status-select h-[38px] w-[140px] min-w-[140px] rounded-[9px] border-[1.5px] border-[#cbd5cf] bg-white text-xs font-medium text-[#2b3934] shadow-sm hover:border-[#92a79c] focus-visible:border-[#0e9f75] focus-visible:ring-2 focus-visible:ring-[#0e9f75]/15"
           aria-label="Filter audit state"
         >
           <SelectValue placeholder="All statuses" />
@@ -297,7 +299,12 @@ export function AdminAuditTable({
   );
 
   return (
-    <section className="admin-table-card" id="audit-jobs">
+    <Card
+      className="admin-table-card m-0 rounded-[14px] border-[#e7ede9] bg-white px-6 pb-4 pt-[22px] shadow-[0_4px_15px_#293e3209] max-[560px]:px-3 max-[560px]:pb-3 max-[560px]:pt-4"
+      id="audit-jobs"
+      role="region"
+      aria-label="Audit jobs"
+    >
       <div className="table-card-heading">
         <div>
           <p className="eyebrow">PIPELINE ACTIVITY</p>
@@ -315,7 +322,7 @@ export function AdminAuditTable({
           <Button
             variant="ghost"
             size="sm"
-            className="text-button"
+            className="ml-auto gap-[7px] px-2 py-[7px] text-[11px] font-bold text-[#36876b]"
             onClick={onRetry}
           >
             Retry
@@ -369,6 +376,6 @@ export function AdminAuditTable({
           </span>
         )}
       </div>
-    </section>
+    </Card>
   );
 }

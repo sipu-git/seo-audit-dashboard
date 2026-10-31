@@ -2,6 +2,7 @@ import type { LocalAudit } from "../../audit-types";
 import { AuditStatusBadge } from "../../dashboard-widgets";
 import { Icon } from "../../icons";
 import { Button } from "../../ui/button";
+import { Card } from "../../ui/card";
 
 export function ClientAuditHistory({
   audits,
@@ -15,7 +16,7 @@ export function ClientAuditHistory({
   onSelect: (jobId: string) => void;
 }) {
   return (
-    <section className="history-card">
+    <Card className="history-card flex h-full min-w-0 flex-col p-6 max-[560px]:p-4">
       <div className="card-heading">
         <div>
           <p className="eyebrow">WORK HISTORY</p>
@@ -74,6 +75,6 @@ export function ClientAuditHistory({
           ))}
         </div>
       )}
-    </section>
+    </Card>
   );
 }

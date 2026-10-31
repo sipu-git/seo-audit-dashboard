@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useEffect, type ReactNode } from "react";
+import { useEffect, useRef, type ReactNode } from "react";
 import { Icon } from "./icons";
 import {
   Sidebar, SidebarContent, SidebarFooter, SidebarGroup, SidebarGroupContent, SidebarGroupLabel, SidebarHeader, SidebarInset,
@@ -18,9 +18,13 @@ const links = [
 
 function AppNavigation({ pathname }: { pathname: string }) {
   const { setOpenMobile } = useSidebar();
+  const previousPathname = useRef(pathname);
 
   useEffect(() => {
-    setOpenMobile(false);
+    if (previousPathname.current !== pathname) {
+      previousPathname.current = pathname;
+      setOpenMobile(false);
+    }
   }, [pathname, setOpenMobile]);
 
   return (
@@ -139,7 +143,7 @@ export function AppShell({
         <header className="topbar">
           <div className="topbar-left">
             <SidebarTrigger
-              className="icon-button"
+              className="text-[#015c21]"
               title="Toggle sidebar"
             />
             <div className="breadcrumbs">

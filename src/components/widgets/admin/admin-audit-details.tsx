@@ -9,6 +9,7 @@ import {
   SheetHeader,
   SheetTitle,
 } from "../../ui/sheet";
+import { Card } from "../../ui/card";
 
 function dateLabel(value: string) {
   return new Intl.DateTimeFormat("en-IN", {
@@ -54,13 +55,13 @@ export function AdminAuditDetails({
             <span>{dateLabel(audit.createdAt)}</span>
           </div>
           {audit.status === "FAILED" && (
-            <div className="job-message job-message-error">
+            <Card className="job-message job-message-error rounded-[10px] border-[#f0d4d1] bg-[#fff8f7] p-[15px] shadow-none">
               <Icon name="alert" />
               <div>
                 <strong>Audit failed</strong>
                 <p>{audit.error || "No error detail was recorded."}</p>
               </div>
-            </div>
+            </Card>
           )}
           {audit.analysis ? (
             <AuditReport
@@ -80,7 +81,7 @@ export function AdminAuditDetails({
             />
           ) : (
             audit.status !== "FAILED" && (
-              <div className="job-message">
+              <Card className="job-message rounded-[10px] border-[#e5ece8] bg-[#f8fbf9] p-[15px] shadow-none">
                 <Icon name="clock" />
                 <div>
                   <strong>Report is not ready yet</strong>
@@ -89,7 +90,7 @@ export function AdminAuditDetails({
                     completes.
                   </p>
                 </div>
-              </div>
+              </Card>
             )
           )}
         </SheetContent>

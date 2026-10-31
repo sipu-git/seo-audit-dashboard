@@ -1,9 +1,14 @@
 import { DashboardMetricCard } from "../../dashboard-widgets";
 import { Icon } from "../../icons";
+import { Card } from "../../ui/card";
 
 export function ClientWelcome() {
   return (
-    <section className="client-welcome">
+    <Card
+      className="client-welcome relative flex min-h-[255px] justify-between overflow-hidden rounded-[18px] border-[#e6efe9] bg-gradient-to-br from-[#effaf4] via-[#f8fbf8] to-[#f2f7fa] px-[37px] py-[30px] max-[780px]:px-[22px] max-[560px]:min-h-[235px]"
+      role="region"
+      aria-label="Client dashboard introduction"
+    >
       <div className="welcome-copy">
         <span className="welcome-kicker">
           <span className="live-dot" /> YOUR GROWTH DESK
@@ -50,7 +55,7 @@ export function ClientWelcome() {
         <span className="art-star star-one">✦</span>
         <span className="art-star star-two">✧</span>
       </div>
-    </section>
+    </Card>
   );
 }
 

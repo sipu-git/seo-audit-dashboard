@@ -3,6 +3,7 @@ import type { LocalAudit } from "../../audit-types";
 import { AuditReport } from "../../audit-report";
 import { AuditStatusBadge } from "../../dashboard-widgets";
 import { Icon } from "../../icons";
+import { Card } from "../../ui/card";
 
 export function ClientSelectedAudit({ audit }: { audit: LocalAudit }) {
   const isComplete = audit.state === "completed";
@@ -10,7 +11,7 @@ export function ClientSelectedAudit({ audit }: { audit: LocalAudit }) {
   const progress = Math.max(8, audit.progress);
 
   return (
-    <section className="selected-audit-area">
+    <Card className="selected-audit-area m-0 p-6 max-[560px]:p-4">
       <div className="card-heading selected-heading">
         <div>
           <p className="eyebrow">AUDIT {audit.jobId}</p>
@@ -28,7 +29,7 @@ export function ClientSelectedAudit({ audit }: { audit: LocalAudit }) {
       {isComplete && audit.result ? (
         <AuditReport result={audit.result} reportJobId={audit.jobId} />
       ) : isFailed ? (
-        <div className="job-message job-message-error">
+        <Card className="job-message job-message-error rounded-[10px] border-[#f0d4d1] bg-[#fff8f7] p-[15px] shadow-none">
           <Icon name="alert" />
           <div>
             <strong>We couldn’t finish this audit.</strong>
@@ -37,9 +38,9 @@ export function ClientSelectedAudit({ audit }: { audit: LocalAudit }) {
                 "Check that the website is reachable, then try again."}
             </p>
           </div>
-        </div>
+        </Card>
       ) : (
-        <div className="progress-card">
+        <Card className="progress-card rounded-xl border-[#e8efea] bg-gradient-to-br from-[#f8fcf9] to-[#f7faff] p-5 shadow-none">
           <div className="progress-visual">
             <div
               className="progress-ring"
@@ -78,8 +79,8 @@ export function ClientSelectedAudit({ audit }: { audit: LocalAudit }) {
               <i>4</i>Report ready
             </span>
           </div>
-        </div>
+        </Card>
       )}
-    </section>
+    </Card>
   );
 }

@@ -8,6 +8,7 @@ import { AuditForm } from "./audit-form";
 import type { AuditInput, AuditRow } from "./audit-types";
 import { Button } from "./ui/button";
 import { Icon } from "./icons";
+import { Card } from "./ui/card";
 import {
   AdminAuditTable,
   ADMIN_AUDIT_PAGE_SIZE,
@@ -119,23 +120,25 @@ export function AdminDashboard() {
       description="Monitor queued jobs, review completed reports, and initiate manual audits."
       action={
         <Button
-          className="button button-primary"
+          className="h-10 rounded-[9px] px-[15px] text-xs font-bold shadow-[0_5px_12px_#118d681f] transition-transform hover:-translate-y-px"
           onClick={() => setShowForm((value) => !value)}
         >
-          <Icon name={showForm ? "close" : "plus"} />
+          <Icon className="size-4" name={showForm ? "close" : "plus"} />
           {showForm ? "Close form" : "New audit"}
         </Button>
       }
     >
       {showForm && (
-        <div className="admin-form-panel">
+        <Card
+          className="admin-form-panel grid grid-cols-[minmax(200px,.75fr)_minmax(0,1.25fr)] items-start gap-6 rounded-[14px] border-[#e7ede9] bg-[#fcfefd] px-6 py-[22px] shadow-[0_4px_15px_#293e3209] max-[780px]:grid-cols-1"
+        >
           <div>
             <p className="eyebrow">MANUAL TRIGGER</p>
             <h2>Queue a website audit</h2>
             <p>Start a BullMQ job and follow its progress in this portal.</p>
           </div>
           <AuditForm compact onQueued={queued} />
-        </div>
+        </Card>
       )}
 
       <AdminQueueStatus

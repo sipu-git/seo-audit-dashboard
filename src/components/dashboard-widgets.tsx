@@ -1,4 +1,5 @@
 import { Badge } from "./ui/badge";
+import { Card } from "./ui/card";
 import { Icon } from "./icons";
 
 type MetricIcon = "file" | "clock" | "check" | "chart";
@@ -20,7 +21,7 @@ export function DashboardMetricCard({
   description: string;
 }) {
   return (
-    <div className="metric-card">
+    <Card className="metric-card flex min-h-[94px] items-center gap-[14px] rounded-[14px] border-[#e8eeea] bg-white p-[18px_20px] shadow-[0_4px_14px_#293e3210]">
       <span className={`metric-icon metric-icon-${tone}`}>
         <Icon name={icon} />
       </span>
@@ -32,7 +33,7 @@ export function DashboardMetricCard({
         </strong>
         <small>{description}</small>
       </div>
-    </div>
+    </Card>
   );
 }
 
@@ -63,9 +64,14 @@ export function AuditStatusBadge({
   return (
     <Badge
       variant={variant}
-      className={`state-badge state-${normalizedState}`}
+      className={`rounded-full px-2 py-1 text-[9px] ${normalizedState}`}
     >
-      {showIndicator && <i />}
+      {showIndicator && (
+        <i
+          aria-hidden="true"
+          className="mr-1 inline-block size-[5px] shrink-0 rounded-full bg-current align-middle"
+        />
+      )}
       {auditStateLabel(state)}
     </Badge>
   );
