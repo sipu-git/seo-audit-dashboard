@@ -1,4 +1,6 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Crawlix
+
+Crawlix is an SEO audit workspace for local businesses and internal teams, built with Next.js.
 
 ## Project guide
 

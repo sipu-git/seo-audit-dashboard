@@ -22,7 +22,7 @@ export function buildAuditReportHtml(data: AuditPdfData): string {
   const score = Math.max(0, Math.min(100, Number(analysis.overall_score) || 0));
 
   return `<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>SEO audit report - ${escapeHtml(data.business.url)}</title><style>${reportStyles}</style></head><body>
-    <header class="brand"><strong>Signal SEO</strong><span>Website audit report · ${escapeHtml(data.jobId)}</span></header>
+    <header class="brand"><strong>Crawlix</strong><span>Website audit report · ${escapeHtml(data.jobId)}</span></header>
     <section class="hero"><p class="eyebrow">SEO audit report</p><h1>${escapeHtml(data.business.businessType)} visibility review</h1><p class="site">${escapeHtml(data.business.url)}</p><div class="meta"><span>${escapeHtml(data.business.city)}, ${escapeHtml(data.business.state)}, India</span><span>Generated ${escapeHtml(formatReportDate(data.createdAt))}</span></div></section>
     <section class="score-panel"><div class="score">${score}<small>/100</small></div><div class="score-copy"><p class="eyebrow">Overall SEO score</p><h2>SEO health overview</h2><p>${escapeHtml(analysis.executive_summary || "Your audit is complete. Review the findings and recommended actions below.")}</p></div></section>
     ${breakdown ? `<section><h2 class="section-title">Score breakdown</h2><div class="breakdown">${breakdown}</div></section>` : ""}

@@ -8,6 +8,7 @@ import {
   Sidebar, SidebarContent, SidebarFooter, SidebarGroup, SidebarGroupContent, SidebarGroupLabel, SidebarHeader, SidebarInset,
   SidebarMenu, SidebarMenuButton, SidebarMenuItem, SidebarProvider, SidebarSeparator, SidebarTrigger, useSidebar,
 } from "./ui/sidebar";
+import Image from "next/image";
 
 const links = [
   { href: "/admin", label: "Admin portal", icon: "grid" as const },
@@ -88,14 +89,18 @@ export function AppShell({
           <Link
             className="flex h-10 items-center gap-3 overflow-hidden rounded-md px-2 group-data-[collapsible=icon]:justify-center group-data-[collapsible=icon]:px-0"
             href="/"
-            aria-label="Signal SEO home"
+            aria-label="Crawlix home"
           >
-            <span className="grid size-9 shrink-0 place-items-center rounded-xl bg-emerald-50 text-emerald-700">
+            {/* <span className="grid size-9 shrink-0 place-items-center rounded-xl bg-emerald-50 text-emerald-700 group-data-[collapsible=icon]:hidden">
               <Icon name="chart" />
-            </span>
-            <span className="whitespace-nowrap text-lg font-bold tracking-tight text-slate-900 group-data-[collapsible=icon]:hidden">
-              signal<span className="font-medium text-emerald-700">.seo</span>
-            </span>
+            </span> */}
+            <Image
+              src="/favicon.ico"
+              alt="Crawlix"
+              width={120}
+              height={40}
+              className="h-10 w-[120px] shrink-0 object-contain object-left group-data-[collapsible=icon]:hidden"
+            />
           </Link>
         </SidebarHeader>
 
@@ -120,7 +125,7 @@ export function AppShell({
             </div>
             <div className="min-w-0 group-data-[collapsible=icon]:hidden">
               <strong className="block truncate text-xs font-semibold text-slate-800">
-                SEO workspace
+                Crawlix workspace
               </strong>
               <small className="mt-1 block text-[10px] text-slate-500">
                 Assessment demo
@@ -153,7 +158,9 @@ export function AppShell({
             <span className="environment-pill">
               <span className="live-dot" /> AUDIT WORKSPACE
             </span>
-            <div className="top-avatar">S</div>
+            <div className="top-avatar" aria-label="Crawlix workspace">
+              C
+            </div>
           </div>
         </header>
 
@@ -168,7 +175,7 @@ export function AppShell({
           </div>
           {children}
           <footer className="page-footer">
-            <span>Signal SEO</span>
+            <span>Crawlix</span>
             <span>SEO intelligence for growing local businesses</span>
             <span>Data sources are labeled live or sample</span>
           </footer>

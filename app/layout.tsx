@@ -15,8 +15,8 @@ const geistMono = localFont({
 });
 
 export const metadata: Metadata = {
-  title: "Signal SEO | Audit workspace",
-  description: "SEO audit workspace for local businesses and internal teams.",
+  title: "Crawlix | SEO audit workspace",
+  description: "Crawlix SEO audit workspace for local businesses and internal teams.",
 };
 
 export default function RootLayout({
