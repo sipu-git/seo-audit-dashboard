@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
-import { getAuditQueue, type AuditJobInput } from "@/src/lib/audit-queue";
+import { getAuditQueue } from "@/src/lib/audit-queue";
+import { parseAuditJobInput } from "@/src/lib/audit-input";
 import { prisma } from "@/src/lib/prisma";
 
 export async function listAudits(request: Request) {
@@ -48,41 +49,6 @@ export async function listAudits(request: Request) {
   }
 }
 
-function isNonEmptyString(value: unknown): value is string {
-  return typeof value === "string" && value.trim().length > 0;
-}
-
-function parseAuditInput(body: unknown): AuditJobInput | string {
-  if (typeof body !== "object" || body === null) {
-    return "Request body must be a JSON object.";
-  }
-
-  const input = body as Record<string, unknown>;
-  const fields = ["url", "businessType", "city", "state"] as const;
-  const missing = fields.filter((field) => !isNonEmptyString(input[field]));
-  if (missing.length > 0) {
-    return `Required fields: ${missing.join(", ")}.`;
-  }
-
-  let parsedUrl: URL;
-  try {
-    parsedUrl = new URL((input.url as string).trim());
-  } catch {
-    return "url must be a valid absolute URL.";
-  }
-
-  if (parsedUrl.protocol !== "http:" && parsedUrl.protocol !== "https:") {
-    return "url must use http or https.";
-  }
-
-  return {
-    url: parsedUrl.toString(),
-    businessType: (input.businessType as string).trim(),
-    city: (input.city as string).trim(),
-    state: (input.state as string).trim(),
-  };
-}
-
 export async function enqueueAudit(request: Request) {
   let body: unknown;
   try {
@@ -91,7 +57,7 @@ export async function enqueueAudit(request: Request) {
     return NextResponse.json({ error: "Request body must be valid JSON." }, { status: 400 });
   }
 
-  const input = parseAuditInput(body);
+  const input = parseAuditJobInput(body);
   if (typeof input === "string") {
     return NextResponse.json({ error: input }, { status: 400 });
   }

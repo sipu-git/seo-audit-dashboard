@@ -33,7 +33,7 @@ export const components = [
     area: "Crawl and analysis",
     paths: "src/lib/crawler/ · src/lib/ai/nemotron/ · src/mocks/",
     responsibility:
-      "Fetch and parse the submitted HTML, inspect robots and sitemap metadata, combine results with configured provider signals, and turn the signals into structured findings.",
+      "Safely fetch public HTTP/S pages, respect robots rules, discover a bounded set of same-origin pages from sitemap and links, structurally validate JSON-LD, and combine crawl results with sample provider signals.",
   },
   {
     area: "Persistence",

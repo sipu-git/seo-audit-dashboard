@@ -6,6 +6,26 @@ Crawlix is an SEO audit workspace for local businesses and internal teams, built
 
 Start the app and open `/docs` for the in-app guide to the client and admin dashboards, audit workflow, module responsibilities, API endpoints, data sources, and local setup.
 
+Copy `.env.example` to `.env.local` for local development. Fill in the service credentials there; never commit `.env.local`.
+
+## Crawler and technical checks
+
+The worker checks `robots.txt` before crawling, respects the SEO-Audit-Bot allow/disallow rules, follows only a small number of safe HTTP redirects, and rejects localhost, private-network, link-local, reserved, and non-standard-port destinations. DNS answers are checked and pinned for each request to reduce SSRF and DNS-rebinding risk. HTML and text responses have size and timeout limits.
+
+The crawler reads same-origin sitemap files and sitemap indexes, then crawls the submitted page plus up to `CRAWL_MAX_PAGES` pages discovered from sitemaps and same-origin links (default 8, maximum 25). It returns page metadata, title/description/headings, image alt gaps, canonical URLs, JSON-LD, robots rules, sitemap validity/counts, and crawl errors. JSON-LD checks are local structural checks for Schema.org context and `@type`; they do not replace Google's Rich Results Test or the full Schema.org validator.
+
+## Scheduled audits with cron-job.org
+
+The protected endpoint is `GET /api/cron/audits`. Configure cron-job.org to call `https://YOUR_DOMAIN/api/cron/audits` and add this request header in its Advanced settings:
+
+```text
+Authorization: Bearer YOUR_CRON_SECRET
+```
+
+Set `CRON_SECRET` in the Vercel Production environment and set `SCHEDULED_AUDIT_TARGETS` to a JSON array of target objects. Each object uses `url`, `businessType`, `city`, and `state`. A maximum of 30 targets is accepted. `CRON_AUDIT_INTERVAL=monthly` (default) queues each target once per month even if cron-job.org calls the endpoint more often. For a short demo, set `CRON_AUDIT_INTERVAL=2m` and configure the cron job to run every two minutes. Do not leave the two-minute setting on for a production schedule unless frequent repeat audits are intended.
+
+The cron-job.org job must be enabled in its dashboard. For the current screenshot configuration, replace the root URL with `/api/cron/audits`, add the Authorization header, and switch **Enable job** on after the Vercel variables are set.
+
 ## PDF audit reports and mock delivery
 
 The BullMQ worker generates an A4 PDF with Puppeteer after SEO analysis. It uploads to a private AWS S3 bucket when configured, or uses the operating system's temporary `reports/seo-audit-reports/` directory (`/tmp/reports/` on Linux/macOS) as a development fallback. Set `AUDIT_REPORT_STORAGE=s3` to require S3, or `AUDIT_REPORT_STORAGE=local` to force local mock storage. The local path can be overridden with `AUDIT_REPORTS_DIR`.
@@ -32,7 +52,7 @@ Keep the credentials out of client-side code and never commit `.env.local`. For 
 
 The production Vercel deployment also starts the BullMQ consumer as a Vercel Daemon. `vercel.json` configures one `audit-worker` instance in Mumbai (`bom1`), and `Dockerfile.worker` installs dependencies, generates Prisma Client, installs Chrome for Puppeteer, and runs `npm run worker`.
 
-Add the worker's required environment variables in Vercel Project Settings for Production: `REDIS_URL`, `DATABASE_URL`, `DIRECT_URL`, `NVIDIA_API_KEY`, `NVIDIA_MODEL_ID`, `AUDIT_REPORT_STORAGE=s3`, `AWS_REGION`, `AWS_S3_BUCKET`, `AWS_ACCESS_KEY_ID`, and `AWS_SECRET_ACCESS_KEY`. The Next.js web service needs the same `REDIS_URL` and database values so both services use the same queue and database. Keep secrets in Vercel's environment settings; `.dockerignore` prevents local `.env` files and credentials from entering the daemon image.
+Add the worker's required environment variables in Vercel Project Settings for Production: `REDIS_URL`, `DATABASE_URL`, `DIRECT_URL`, `USE_MOCKS=true`, `NVIDIA_API_KEY`, `NVIDIA_MODEL_ID`, `CRAWL_MAX_PAGES`, `AUDIT_REPORT_STORAGE=s3`, `AWS_REGION`, `AWS_S3_BUCKET`, `AWS_ACCESS_KEY_ID`, `AWS_SECRET_ACCESS_KEY`, `CRON_SECRET`, `CRON_AUDIT_INTERVAL`, and `SCHEDULED_AUDIT_TARGETS`. The Next.js web service needs `REDIS_URL`, both database URLs, and `USE_MOCKS=true`; set the cron variables for the web service too. Keep secrets in Vercel's environment settings; `.dockerignore` prevents local `.env` files and credentials from entering the daemon image.
 
 Commit and push these files, then deploy the Production branch to Vercel. Check the project logs for `Worker listening on seo-audit-jobs` and job completion/error messages. Vercel Daemons run in production; `vercel dev` does not start them, so continue starting `npm run worker` locally during development. Daemons are in public beta and use provisioned-memory quota while running, including while idle.
 

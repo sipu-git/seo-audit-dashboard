@@ -1,14 +1,10 @@
 import { Queue } from "bullmq";
 import IORedis from "ioredis";
+import type { AuditJobInput } from "./audit-input";
+
+export type { AuditJobInput } from "./audit-input";
 
 export const SEO_AUDIT_QUEUE = "seo-audit-jobs";
-
-export type AuditJobInput = {
-  url: string;
-  businessType: string;
-  city: string;
-  state: string;
-};
 
 type QueueGlobals = typeof globalThis & {
   seoAuditQueue?: Queue<AuditJobInput>;

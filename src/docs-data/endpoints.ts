@@ -24,4 +24,9 @@ export const endpoints = [
     path: "/api/audit-preview",
     purpose: "Run the preview service directly without first queueing a job.",
   },
+  {
+    method: "GET",
+    path: "/api/cron/audits",
+    purpose: "Queue the configured monthly or demo audit targets; requires Authorization: Bearer CRON_SECRET.",
+  },
 ];

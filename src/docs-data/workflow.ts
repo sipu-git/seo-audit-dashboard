@@ -21,7 +21,7 @@ export const workflow = [
     number: "03",
     title: "Process the audit",
     description:
-      "The separate worker records the job in PostgreSQL, crawls the submitted page, combines the crawl with sample provider signals, and requests a prioritized analysis.",
+      "The separate worker records the job in PostgreSQL, respects robots.txt, crawls a bounded set of same-origin pages from sitemaps and links, validates JSON-LD structure, combines crawl data with sample provider signals, and requests a prioritized analysis.",
     detail: "worker/audit-worker.ts",
     icon: Activity,
   },
@@ -37,7 +37,7 @@ export const workflow = [
     number: "05",
     title: "Follow progress and review",
     description:
-      "The dashboards query job status while work is active. The client can view progress and its report; admins can search, filter, page through jobs, and open audit details.",
+      "The dashboards query job status while work is active. The client can view progress and its report; admins can search, filter, page through jobs, and open audit details. cron-job.org can queue configured targets through the protected scheduled-audit endpoint.",
     detail: "TanStack Query + audit status APIs",
     icon: Gauge,
   },

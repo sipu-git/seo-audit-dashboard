@@ -18,18 +18,26 @@ ${JSON.stringify({
     links: signals.crawl.links,
     imagesMissingAlt: signals.crawl.imagesMissingAlt,
     canonical: signals.crawl.canonical,
+    siteSummary: signals.crawl.siteSummary,
+    crawledPages: signals.crawl.pages,
   }, null, 2)}
 === TECHNICAL DATA ===
 ${JSON.stringify({
+    requestedUrl: signals.crawl.requestedUrl,
     finalUrl: signals.crawl.finalUrl,
     httpStatus: signals.crawl.status,
     robots: signals.crawl.robots,
     sitemaps: signals.crawl.sitemaps,
+    crawlErrors: signals.crawl.crawlErrors,
   }, null, 2)}
 === CORE WEB VITALS ===
 ${JSON.stringify(signals.pagespeed, null, 2)}
 === SCHEMA.ORG DATA ===
-${JSON.stringify(signals.crawl.schema, null, 2)}
+${JSON.stringify({
+    homePage: signals.crawl.schema,
+    validation: signals.crawl.schemaValidation,
+    pageResults: signals.crawl.pages,
+  }, null, 2)}
 === GOOGLE SEARCH CONSOLE ===
 ${JSON.stringify(signals.googleSearchConsole, null, 2)}
 === KEYWORD RANKINGS ===
@@ -41,6 +49,7 @@ Always include all four array fields: critical_issues, important_issues, quick_w
 - overall_score and every score_breakdown value must be an integer from 0 to 100.
 - critical_issues: at most 5 items; important_issues: at most 8 items.
 - quick_wins: at most 5 items, and each must have effort of 2 hours or less.
+- For quick_wins, use effort "Hours" and make the fix explicitly achievable within two hours.
 - Every recommendation must include finding, fix, estimated_impact, effort, and falsifiability_check.
 - Use only the priority values CRITICAL, HIGH, MEDIUM, LOW.
 - Use only the category values Technical, OnPage, Content, Schema, CWV.

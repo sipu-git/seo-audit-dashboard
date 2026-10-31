@@ -7,7 +7,8 @@ export type AuditPreviewInput = {
 
 export type AuditSignals = {
   crawl: {
-    status: number;
+    requestedUrl?: string;
+    status: number | null;
     finalUrl: string;
     title: string;
     metaDescription: string;
@@ -16,6 +17,16 @@ export type AuditSignals = {
     imagesMissingAlt: number;
     canonical: string | null;
     schema: unknown[];
+    schemaValidation?: {
+      validator: string;
+      valid: boolean;
+      itemCount: number;
+      errors: string[];
+      warnings: string[];
+    };
+    pages?: unknown[];
+    siteSummary?: unknown;
+    crawlErrors?: string[];
     robots: unknown;
     sitemaps: unknown[];
   };

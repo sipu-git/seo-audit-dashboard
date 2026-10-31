@@ -8,6 +8,10 @@ export const environmentGroups = [
       ["NVIDIA_API_KEY", "Server-side API key required for Nemotron analysis."],
       ["NVIDIA_MODEL_ID", "Optional model override; the service has a default."],
       ["USE_MOCKS", "Set to true to use the current sample provider signals."],
+      ["CRON_SECRET", "Bearer secret required by the scheduled audit endpoint."],
+      ["CRON_AUDIT_INTERVAL", "Deduplication cadence: monthly (default), daily, hourly, 5m, or 2m."],
+      ["SCHEDULED_AUDIT_TARGETS", "JSON array of up to 30 scheduled audit inputs."],
+      ["CRAWL_MAX_PAGES", "Maximum pages per site audit; defaults to 8 and is capped at 25."],
     ],
   },
   {
