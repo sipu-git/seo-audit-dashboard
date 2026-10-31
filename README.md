@@ -26,7 +26,7 @@ The worker logs mock WhatsApp and email deliveries after report generation. It a
 
 The local temporary directory is intended for assessment and development. It is not durable storage for a production deployment; use the required storage provider when moving beyond the mock implementation.
 
-Keep the credentials out of client-side code and never commit `.env.local`. Run the web app and worker in separate terminals. The download button appears once the worker has generated and stored the PDF.
+Keep the credentials out of client-side code and never commit `.env.local`. Run the web app and worker in separate terminals: use `npm run dev` for the web app and `npm run worker` in a second terminal to process queued audits. The download button appears once the worker has generated and stored the PDF.
 
 ## Getting Started
 

@@ -8,7 +8,7 @@ import { Card } from "../../ui/card";
 export function ClientSelectedAudit({ audit }: { audit: LocalAudit }) {
   const isComplete = audit.state === "completed";
   const isFailed = audit.state === "failed";
-  const progress = Math.max(8, audit.progress);
+  const progress = Math.min(100, Math.max(0, audit.progress));
 
   return (
     <Card className="selected-audit-area m-0 p-6 max-[560px]:p-4">
