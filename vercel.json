@@ -1,0 +1,13 @@
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "daemons": {
+    "audit-worker": {
+      "root": ".",
+      "entrypoint": "Dockerfile.worker",
+      "instances": {
+        "bom1": 1
+      },
+      "terminationGracePeriodSeconds": 600
+    }
+  }
+}
