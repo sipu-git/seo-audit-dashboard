@@ -12,6 +12,8 @@ COPY . .
 RUN DATABASE_URL="postgresql://build:build@127.0.0.1:5432/build" \
     DIRECT_URL="postgresql://build:build@127.0.0.1:5432/build" \
     npx prisma generate
-RUN npx puppeteer browsers install chrome --install-deps
+RUN apt-get update \
+    && npx puppeteer browsers install chrome --install-deps \
+    && rm -rf /var/lib/apt/lists/*
 
 CMD ["npm", "run", "worker"]
