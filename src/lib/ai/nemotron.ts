@@ -1,4 +1,7 @@
-export { analyzeAuditWithNemotron } from "./nemotron/index";
+export {
+  analyzeAuditWithNemotron,
+  RetryableNemotronError,
+} from "./nemotron/index";
 export type {
   AuditAnalysis,
   AuditPreviewInput,

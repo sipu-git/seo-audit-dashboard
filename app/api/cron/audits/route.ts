@@ -85,6 +85,8 @@ export async function GET(request: Request) {
       const digest = createHash("sha256").update(JSON.stringify(target)).digest("hex").slice(0, 16);
       return queue.add("site-audit", target, {
         jobId: `cron-${windowKey.replace(/[^a-zA-Z0-9_-]/g, "-")}-${digest}`,
+        attempts: 3,
+        backoff: { type: "exponential", delay: 10_000 },
         removeOnComplete: 100,
         removeOnFail: 500,
       });

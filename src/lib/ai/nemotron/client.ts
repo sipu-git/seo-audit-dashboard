@@ -2,6 +2,15 @@ import { buildUserPrompt, SYSTEM_PROMPT } from "./prompt";
 import { parseAuditResponse } from "./response";
 import type { AuditAnalysis, AuditPreviewInput, AuditSignals } from "./types";
 
+export class RetryableNemotronError extends Error {
+  constructor(message: string) {
+    super(message);
+    this.name = "RetryableNemotronError";
+  }
+}
+
+const RETRYABLE_NVIDIA_STATUSES = new Set([408, 429, 500, 502, 503, 504]);
+
 export async function analyzeAuditWithNemotron(
   business: AuditPreviewInput,
   signals: AuditSignals,
@@ -33,7 +42,11 @@ export async function analyzeAuditWithNemotron(
 
   if (!response.ok) {
     const details = (await response.text()).slice(0, 500);
-    throw new Error(`Nemotron API returned HTTP ${response.status}: ${details}`);
+    const message = `Nemotron API returned HTTP ${response.status}: ${details}`;
+    if (RETRYABLE_NVIDIA_STATUSES.has(response.status)) {
+      throw new RetryableNemotronError(message);
+    }
+    throw new Error(message);
   }
 
   const payload = await response.json() as {

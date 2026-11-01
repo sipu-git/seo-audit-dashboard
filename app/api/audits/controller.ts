@@ -64,6 +64,8 @@ export async function enqueueAudit(request: Request) {
 
   try {
     const job = await getAuditQueue().add("site-audit", input, {
+      attempts: 3,
+      backoff: { type: "exponential", delay: 10_000 },
       removeOnComplete: 100,
       removeOnFail: 500,
     });

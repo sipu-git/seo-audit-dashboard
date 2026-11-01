@@ -1,8 +1,9 @@
 import { loadEnvConfig } from "@next/env";
 import { AuditStatus, Prisma } from "@prisma/client";
-import { Worker } from "bullmq";
+import { UnrecoverableError, Worker } from "bullmq";
 import IORedis from "ioredis";
 import { SEO_AUDIT_QUEUE, type AuditJobInput } from "../src/lib/audit-queue";
+import { RetryableNemotronError } from "../src/lib/ai/nemotron";
 import { prisma } from "../src/lib/prisma";
 import { notifyAuditCompleted } from "../src/lib/notifications/audit-completed";
 import { closePdfBrowser } from "../src/lib/reports/pdf/browser";
@@ -101,10 +102,20 @@ async function main() {
         return result;
       } catch (error) {
         const message = error instanceof Error ? error.message : "Audit failed.";
+        const maxAttempts = job.opts.attempts ?? 1;
+        const attemptNumber = job.attemptsMade + 1;
+        const retryPending = error instanceof RetryableNemotronError && attemptNumber < maxAttempts;
+
         await prisma.audit.update({
           where: { jobId },
-          data: { status: AuditStatus.FAILED, error: message },
+          data: retryPending
+            ? { status: AuditStatus.PROCESSING, error: null }
+            : { status: AuditStatus.FAILED, error: message },
         });
+
+        // BullMQ retries transient NVIDIA 408/429/5xx responses with backoff.
+        // Mark all other errors unrecoverable so they do not waste retries.
+        if (!retryPending) throw new UnrecoverableError(message);
         throw error;
       }
     },
@@ -114,6 +125,17 @@ async function main() {
   worker.on("ready", () => console.log(`Worker listening on ${SEO_AUDIT_QUEUE}`));
   worker.on("completed", (job) => console.log(`Audit job ${job.id} completed.`));
   worker.on("failed", (job, error) => {
+    if (
+      job &&
+      !(error instanceof UnrecoverableError) &&
+      job.attemptsMade < (job.opts.attempts ?? 1)
+    ) {
+      console.warn(
+        `Audit job ${job.id} attempt ${job.attemptsMade} failed; retrying automatically:`,
+        error.message,
+      );
+      return;
+    }
     console.error(`Audit job ${job?.id ?? "unknown"} failed:`, error.message);
   });
 
