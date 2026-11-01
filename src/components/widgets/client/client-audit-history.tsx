@@ -9,11 +9,13 @@ export function ClientAuditHistory({
   hydrated,
   selectedJobId,
   onSelect,
+  onClear,
 }: {
   audits: LocalAudit[];
   hydrated: boolean;
   selectedJobId: string | null;
   onSelect: (jobId: string) => void;
+  onClear: () => void;
 }) {
   return (
     <Card className="history-card flex h-full min-w-0 flex-col p-6 max-[560px]:p-4">
@@ -23,7 +25,21 @@ export function ClientAuditHistory({
           <h2>Recent audits</h2>
           <p>Follow each job from queue to finished report.</p>
         </div>
-        <span className="history-count">{audits.length}</span>
+        <div className="flex items-center gap-2">
+          <span className="history-count">{audits.length}</span>
+          {hydrated && audits.length > 0 && (
+            <Button
+              type="button"
+              variant="ghost"
+              size="sm"
+              className="text-slate-500 hover:text-red-700"
+              title="Remove this history from this browser only. Stored reports and running audits are not deleted."
+              onClick={onClear}
+            >
+              Clear all
+            </Button>
+          )}
+        </div>
       </div>
       {!hydrated ? (
         <div className="history-empty">

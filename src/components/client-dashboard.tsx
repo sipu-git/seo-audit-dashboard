@@ -124,6 +124,16 @@ export function ClientDashboard() {
     setSelectedId(jobId);
   }
 
+  function clearHistory() {
+    try {
+      window.localStorage.removeItem(HISTORY_KEY);
+    } catch {
+      // The visible list can still be cleared if browser storage is unavailable.
+    }
+    setAudits([]);
+    setSelectedId(null);
+  }
+
   const selected = audits.find((audit) => audit.jobId === selectedId) ?? audits[0];
   const activeCount = audits.filter((audit) =>
     ["waiting", "active", "processing"].includes(audit.state),
@@ -151,6 +161,7 @@ export function ClientDashboard() {
           hydrated={hydrated}
           selectedJobId={selected?.jobId ?? null}
           onSelect={setSelectedId}
+          onClear={clearHistory}
         />
       </div>
       {selected && <ClientSelectedAudit audit={selected} />}
