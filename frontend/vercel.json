@@ -1,0 +1,38 @@
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "services": {
+    "frontend": {
+      "root": "frontend/",
+      "framework": "nextjs"
+    },
+    "backend": {
+      "root": "backend/",
+      "runtime": "container",
+      "entrypoint": "Dockerfile.api"
+    }
+  },
+  "routes": [
+    {
+      "src": "^/api/(.*)$",
+      "destination": {
+        "service": "backend"
+      }
+    },
+    {
+      "src": "^/(.*)$",
+      "destination": {
+        "service": "frontend"
+      }
+    }
+  ],
+  "daemons": {
+    "audit-worker": {
+      "root": "backend/",
+      "entrypoint": "Dockerfile.worker",
+      "instances": {
+        "bom1": 1
+      },
+      "terminationGracePeriodSeconds": 600
+    }
+  }
+}
